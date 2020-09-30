@@ -16,18 +16,27 @@
       </div>
 
       <div class="flex flex-col">
+        <label for="currency">Currency</label>
+        <select id="currency" v-model="currency" class="border border-gray-500 p-1">
+          <option value="CAD">CAD</option>
+          <option value="USD">USD</option>
+        </select>
+      </div>
+
+      <hr>
+
+      <div class="flex flex-col">
         <label for="gst">GST 5%</label>
-        <input :value="gst" readonly type="text" id="gst" class="border border-gray-500 p-1">
+        <input class="font-bold" :value="this.format(gst)" readonly type="text" id="gst">
       </div>
 
       <div class="flex flex-col">
         <label for="taxes">Taxes: 25%</label>
-        <input :value="taxes" readonly type="text" id="taxes" class="border border-gray-500 p-1">
+        <input class="font-bold" :value="this.format(taxes)" readonly type="text" id="taxes">
       </div>
-
-      <h3 class="text-lg font-bold" v-if="takeHome">${{ takeHome }}</h3>
+      
+      <h3 class="text-lg font-bold" v-if="takeHomeTotal">Take Home: {{ formattedTakeHome }}</h3>
     </div>
-
   </div>
 </template>
 
@@ -36,14 +45,24 @@ export default {
   name: 'App',
   data () {
     return {
+      currency: 'CAD',
       invoiceTotal: 0,
     };
+  },
+  methods: {
+    format (number) {
+      return new Intl.NumberFormat('en-US', {style: 'currency', currency: this.currency})
+          .format(number);
+    },
   },
   computed: {
     total () {
       return parseInt(this.invoiceTotal);
     },
-    takeHome () {
+    formattedTakeHome () {
+      return this.format(this.takeHomeTotal);
+    },
+    takeHomeTotal () {
       return this.total - this.taxes - this.gst;
     },
     taxes () {
