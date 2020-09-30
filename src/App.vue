@@ -34,7 +34,7 @@
         <label for="taxes">Taxes: 25%</label>
         <input class="font-bold" :value="this.format(taxes)" readonly type="text" id="taxes">
       </div>
-      
+
       <h3 class="text-lg font-bold" v-if="takeHomeTotal">Take Home: {{ formattedTakeHome }}</h3>
     </div>
   </div>
@@ -63,7 +63,7 @@ export default {
       return this.format(this.takeHomeTotal);
     },
     takeHomeTotal () {
-      return this.total - this.taxes - this.gst;
+      return this.total - this.taxes;
     },
     taxes () {
       return this.total * 0.25;
